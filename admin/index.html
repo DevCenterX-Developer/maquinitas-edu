@@ -1,0 +1,657 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de Administración - Máquinas EDU GT - Gestión de productos educativos">
+    <meta name="keywords" content="admin, gestión, productos, máquinas educativas, Guatemala">
+    <meta name="author" content="Máquinas EDU GT">
+    <link rel="icon" type="image/png" href="../maquinitassinfondo.png">
+    <link rel="apple-touch-icon" href="../maquinitassinfondo.png">
+
+    <title>Gestión | Máquinas EDU GT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #090f1e;
+            --bg-tertiary: #111827;
+            --text-primary: #e2e8f0;
+            --text-accent: #38bdf8;
+            --text-secondary: #a78bfa;
+            --text-muted: #94a3b8;
+            --border-color: #1f2937;
+            --brand-primary: #2563eb;
+            --brand-hover: #818cf8;
+            --gold-gradient: linear-gradient(135deg, #22d3ee 0%, #8b5cf6 45%, #c084fc 100%);
+            --gold-solid: #38bdf8;
+            --shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+            --card-bg: #111827;
+            --accent-blue: #60a5fa;
+            --primary: #38bdf8;
+            --primary-hover: #22d3ee;
+            --primary-light: #111827;
+            --secondary: #a855f7;
+            --text-dark: #e2e8f0;
+            --text-gray: #94a3b8;
+            --bg-page: #070b16;
+            --bg-card: #0f172a;
+            --success: #22c55e;
+            --info: #38bdf8;
+            --error: #f472b6;
+            --border: #1f2937;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-page: #1c1016;
+                --bg-card: #29151e;
+                --text-dark: #fce7f3;
+                --text-gray: #fbcfe8;
+                --border: #451525;
+                --primary-light: #3d1020;
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-page); color: var(--text-dark); min-height: 100vh; padding: 1rem; }
+        .admin-container { width: 100%; max-width: 1000px; margin: 0 auto; }
+        .admin-layout { display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; margin-bottom: 2rem; }
+        @media (max-width: 850px) { .admin-layout { grid-template-columns: 1fr; } .preview-side { display: none; } }
+        .card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow); border: 1px solid rgba(56, 189, 248, 0.18); }
+        @media (max-width: 600px) { .card { padding: 1.5rem; } .brand-header h1 { font-size: 1.8rem; } }
+        .brand-header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--primary); line-height: 1.2; }
+        .brand-header p { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 2px solid var(--border); background: #111827; color: var(--text-dark); outline: none; transition: 0.3s; font-size: 0.95rem; }
+        textarea { min-height: 120px; resize: vertical; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #0b1120; }
+        .method-selector { display: flex; background: rgba(15, 23, 42, 0.95); padding: 4px; border-radius: 12px; margin-bottom: 1rem; border: 1px solid rgba(56, 189, 248, 0.14); }
+        .method-btn { flex: 1; padding: 0.5rem; font-size: 0.75rem; font-weight: 700; border: none; background: transparent; cursor: pointer; border-radius: 10px; transition: 0.3s; color: var(--text-gray); }
+        .method-btn.active { background: rgba(56, 189, 248, 0.13); box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.22); color: var(--primary); }
+        .upload-area { border: 2px dashed rgba(56, 189, 248, 0.6); border-radius: var(--radius-md); padding: 2rem; text-align: center; background: rgba(15, 23, 42, 0.95); position: relative; cursor: pointer; color: var(--text-gray); }
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(56, 189, 248, 0.1);
+        }
+        .upload-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .btn-submit { width: 100%; padding: 1rem; border-radius: var(--radius-md); border: none; background: linear-gradient(135deg, #22d3ee, #818cf8); color: white; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 1rem; font-size: 1rem; box-shadow: 0 12px 30px rgba(34, 211, 238, 0.25); }
+        .btn-submit:hover { transform: translateY(-1px); }
+        .btn-cancel { width: 100%; padding: 0.75rem; border: none; background: rgba(255,255,255,0.05); color: var(--text-gray); border-radius: var(--radius-md); margin-top: 0.5rem; cursor: pointer; font-weight: 600; border: 1px solid rgba(56, 189, 248, 0.15); }
+        .list-section h2 { font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-dark); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; }
+        .item-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-card); border: 1px solid rgba(56, 189, 248, 0.12); border-radius: var(--radius-md); box-shadow: 0 16px 30px rgba(0,0,0,0.25); }
+        .item-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; background: #eee; }
+        .item-info { flex-grow: 1; overflow: hidden; }
+        .item-info h4 { font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-info p { font-size: 0.85rem; color: var(--primary); font-weight: 700; }
+        .item-actions { display: flex; flex-direction: column; gap: 0.4rem; }
+        .action-btn { border: none; padding: 0.4rem 0.6rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .edit-btn { background: #dbeafe; color: #1e40af; }
+        .edit-btn:hover { background: #1e40af; color: white; }
+        .delete-btn { background: #fee2e2; color: #b91c1c; }
+        .delete-btn:hover { background: #b91c1c; color: white; }
+        .msg { padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; font-size: 0.85rem; display: none; font-weight: 600; }
+        .msg.success { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .msg.error { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .preview-side { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 2rem; height: fit-content; }
+        .preview-box { background: var(--bg-card); border-radius: 20px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,0.35); }
+        .preview-img-container { width: 100%; height: 180px; background: #0b1120; display: flex; align-items: center; justify-content: center; position: relative; }
+        .preview-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-label { position: absolute; top: 10px; left: 10px; background: var(--primary); color: white; padding: 2px 8px; font-size: 0.6rem; font-weight: 800; border-radius: 5px; }
+        .images-container { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .image-field { display: flex; flex-direction: column; gap: 0.5rem; }
+        .image-field input[type="file"], .image-field input[type="url"] { width: 100%; padding: 0.5rem; border-radius: var(--radius-md); border: 2px solid var(--border); background: var(--bg-card); color: var(--text-dark); outline: none; transition: 0.3s; }
+        .image-field input[type="file"]:focus, .image-field input[type="url"]:focus { border-color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <header class="nav-header">
+            <a href="../index.html" class="back-link">
+                <i class="fa-solid fa-arrow-left fa-fw" aria-hidden="true"></i>
+                Regresar a la Tienda
+            </a>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div id="connection-status" style="font-size: 0.7rem; color: var(--success); font-weight: 600;">EN LÍNEA</div>
+                <span id="system-time" style="font-size: 0.7rem; color: var(--text-gray); font-weight: 600;">EN VIVO</span>
+            </div>
+        </header>
+
+        <div class="admin-layout">
+            <section class="card">
+                <div class="brand-header">
+                    <h1 id="form-title">Nuevo Producto</h1>
+                    <p id="form-desc">Completa los datos para publicar un nuevo producto en la tienda.</p>
+                </div>
+
+                <div id="msg-box" class="msg"></div>
+
+                <form id="admin-form">
+                    <input type="hidden" id="edit-id">
+
+                    <div class="form-group">
+                        <label for="name">Nombre del producto</label>
+                        <input type="text" id="name" required placeholder="Máquina de peluches" autocomplete="off">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="precio">Precio (COP)</label>
+                            <input type="number" id="precio" min="0" required placeholder="120000" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="descuento">Descuento (%)</label>
+                            <input type="number" id="descuento" min="0" max="100" value="0" placeholder="10" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <select id="categoria" required autocomplete="off">
+                            <option value="" disabled selected>Selecciona categoría</option>
+                            <option>Maquinas árcade</option>
+                            <option>Maquinas xbox 360</option>
+                            <option>Maquinas vending</option>
+                            <option>Accesorios</option>
+                            <option>Repuestos</option>
+                            <option>Maquinas pelucheras</option>
+                            <option>Producto variado</option>
+                            <option>Producto vending</option>
+                            <option>Producto para maquina peluchera</option>
+                            <option>Consolas</option>
+                            <option>Controles</option>
+                            <option>Reparaciones</option>
+                            <option>Sistemas</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="desc">Descripción</label>
+                        <textarea id="desc" placeholder="Descripción breve del producto" autocomplete="off"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Imágenes del Producto</label>
+                        <div class="images-container">
+                            <div class="image-field">
+                                <label for="image1-file">Imagen 1</label>
+                                <input type="file" id="image1-file" accept="image/*">
+                                <input type="url" id="image1-url" placeholder="URL de la imagen 1" style="display:none;" autocomplete="off">
+                            </div>
+                            <div class="image-field">
+                                <label for="image2-file">Imagen 2</label>
+                                <input type="file" id="image2-file" accept="image/*">
+                                <input type="url" id="image2-url" placeholder="URL de la imagen 2" style="display:none;" autocomplete="off">
+                            </div>
+                            <div class="image-field">
+                                <label for="image3-file">Imagen 3</label>
+                                <input type="file" id="image3-file" accept="image/*">
+                                <input type="url" id="image3-url" placeholder="URL de la imagen 3" style="display:none;" autocomplete="off">
+                            </div>
+                            <div class="image-field">
+                                <label for="image4-file">Imagen 4</label>
+                                <input type="file" id="image4-file" accept="image/*">
+                                <input type="url" id="image4-url" placeholder="URL de la imagen 4" style="display:none;" autocomplete="off">
+                            </div>
+                            <div class="image-field">
+                                <label for="image5-file">Imagen 5</label>
+                                <input type="file" id="image5-file" accept="image/*">
+                                <input type="url" id="image5-url" placeholder="URL de la imagen 5" style="display:none;" autocomplete="off">
+                            </div>
+                        </div>
+                        <div id="images-preview" style="margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.8rem;">
+                            <div id="image-counter" style="grid-column: 1/-1; font-size: 0.7rem; color: var(--text-gray); text-align: center; margin-bottom: 0.5rem;">0 imágenes seleccionadas</div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="btn-save">Guardar producto</button>
+                    <button type="button" class="btn-cancel" id="btn-cancel-edit" style="display:none;">Cancelar edición</button>
+                </form>
+            </section>
+
+            <aside class="preview-side">
+                <span style="font-weight: 800; font-size: 0.65rem; color: var(--primary); letter-spacing: 1px;">VISTA PREVIA EN VIVO</span>
+                <div class="preview-box">
+                    <div class="preview-img-container">
+                        <img src="" id="ui-img" style="display:none;">
+                        <i class="fa-solid fa-image fa-2x" id="ui-placeholder" style="color: var(--primary);"></i>
+                        <div class="preview-label">MUESTRA</div>
+                    </div>
+                    <div style="padding: 1.2rem; text-align: center;">
+                        <h4 id="ui-name" style="font-size: 0.9rem; margin-bottom: 0.3rem;">Producto</h4>
+                        <div id="ui-price" style="font-weight: 800; color: var(--text-dark);">$0</div>
+                    </div>
+                </div>
+                <p style="font-size: 0.7rem; color: var(--text-gray); line-height: 1.4;">Los cambios que guardes se publicarán en el catálogo.</p>
+            </aside>
+        </div>
+
+        <section class="list-section">
+            <h2>Gestión de inventario</h2>
+            <div id="product-list" class="product-grid">
+                <p style="color: var(--text-gray); font-style: italic;">Cargando productos...</p>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            getDoc,
+            getDocs,
+            addDoc,
+            updateDoc,
+            deleteDoc,
+            query,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGM_uhBQrcb0tJbFGgjYbAwMlxvLMAQEo",
+            authDomain: "maquinitas-edu.firebaseapp.com",
+            projectId: "maquinitas-edu",
+            storageBucket: "maquinitas-edu.firebasestorage.app",
+            messagingSenderId: "787575674360",
+            appId: "1:787575674360:web:105a03c7f688e226a3720d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const productsCollection = collection(db, 'productos');
+
+        const cloudName = 'dxo5hsyne';
+        const apiKey = '259528425163714';
+        const apiSecret = 'hRsU-ZvQN9WnuHoGmXNaf_79w7c';
+
+        let imageMethod = 'file';
+        let currentProductId = null;
+        let currentImageUrl = '';
+        let uploadedImages = [];
+
+        const msgBox = document.getElementById('msg-box');
+        const form = document.getElementById('admin-form');
+        const imagesPreview = document.getElementById('images-preview');
+
+        // Get all image inputs
+        const imageInputs = [];
+        for (let i = 1; i <= 5; i++) {
+            imageInputs.push({
+                file: document.getElementById(`image${i}-file`),
+                url: document.getElementById(`image${i}-url`)
+            });
+        }
+
+        function setMethod(method) {
+            imageMethod = method;
+            imageInputs.forEach(input => {
+                input.file.style.display = method === 'file' ? 'block' : 'none';
+                input.url.style.display = method === 'url' ? 'block' : 'none';
+            });
+        }
+
+        function updatePreview() {
+            imagesPreview.innerHTML = '';
+            const images = [];
+            
+            imageInputs.forEach((input, idx) => {
+                const value = imageMethod === 'file' ? (input.file.files[0] ? { file: input.file.files[0], preview: URL.createObjectURL(input.file.files[0]) } : null) : (input.url.value.trim() || null);
+                if (value) {
+                    images.push({ src: imageMethod === 'file' ? value.preview : value, index: idx + 1 });
+                }
+            });
+            
+            const counter = document.getElementById('image-counter');
+            counter.textContent = `${images.length} imagen${images.length !== 1 ? 'es' : ''} seleccionada${images.length !== 1 ? 's' : ''}`;
+            
+            images.forEach((img) => {
+                const container = document.createElement('div');
+                container.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1;';
+                
+                const thumbnail = document.createElement('img');
+                thumbnail.src = img.src;
+                thumbnail.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+                container.appendChild(thumbnail);
+                
+                const badge = document.createElement('span');
+                badge.style.cssText = 'position: absolute; top: 4px; right: 4px; background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 700;';
+                badge.textContent = img.index;
+                container.appendChild(badge);
+                
+                imagesPreview.appendChild(container);
+            });
+
+            // Update preview image
+            if (images.length > 0) {
+                const img = document.getElementById('ui-img');
+                img.src = images[0].src;
+                img.style.display = 'block';
+                document.getElementById('ui-placeholder').style.display = 'none';
+            } else {
+                document.getElementById('ui-img').style.display = 'none';
+                document.getElementById('ui-placeholder').style.display = 'block';
+            }
+        }
+
+        containerFile.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            containerFile.classList.add('dragover');
+        });
+
+        containerFile.addEventListener('dragleave', () => {
+            containerFile.classList.remove('dragover');
+        });
+
+        containerFile.addEventListener('drop', (e) => {
+            e.preventDefault();
+            containerFile.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        });
+
+        // Add event listeners for all inputs
+        imageInputs.forEach(input => {
+            input.file.addEventListener('change', updatePreview);
+            input.url.addEventListener('input', updatePreview);
+        });
+
+        function resetForm() {
+            currentProductId = null;
+            currentImageUrl = '';
+            document.getElementById('name').value = '';
+            document.getElementById('categoria').value = '';
+            document.getElementById('desc').value = '';
+            document.getElementById('precio').value = '';
+            document.getElementById('descuento').value = '0';
+            
+            // Limpiar todos los campos de imagen
+            imageInputs.forEach(input => {
+                input.file.value = '';
+                input.url.value = '';
+            });
+            
+            setMethod('file');
+            updatePreview();
+            document.getElementById('form-title').innerText = 'Nuevo Producto';
+            document.getElementById('form-desc').innerText = 'Completa los datos para publicar un nuevo producto en la tienda.';
+            document.getElementById('btn-save').innerText = 'Guardar producto';
+            document.getElementById('btn-cancel-edit').style.display = 'none';
+        }
+
+        form.onsubmit = handleSubmit;
+
+        async function refreshProducts() {
+            const list = document.getElementById('product-list');
+            if (!list) {
+                console.error('Elemento product-list no encontrado');
+                return;
+            }
+
+            list.innerHTML = '<p style="color: var(--text-gray); font-style: italic;">Cargando productos...</p>';
+            try {
+                const snapshot = await getDocs(query(productsCollection, orderBy('name', 'asc')));
+                if (snapshot.empty) {
+                    list.innerHTML = '<p style="color: var(--text-gray); font-style: italic;">No hay productos registrados.</p>';
+                    return;
+                }
+
+                list.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const item = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = `
+                        <img src="${item.image || 'https://via.placeholder.com/100'}" onerror="this.src='https://via.placeholder.com/100?text=Error'">
+                        <div class="item-info">
+                            <h4>${item.name || 'Sin nombre'}</h4>
+                            <p>${item.categoria || ''}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn edit-btn" type="button" onclick="editProduct('${doc.id}')">EDITAR</button>
+                            <button class="action-btn delete-btn" type="button" onclick="deleteProduct('${doc.id}')">BORRAR</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error cargando productos:', error);
+                list.innerHTML = '<p style="color: var(--error); font-style: italic;">Error de conexión. Verifica tu conexión a internet.</p>';
+            }
+        }
+
+        async function cloudinarySignature(timestamp) {
+            const toSign = `timestamp=${timestamp}${apiSecret}`;
+            const encoder = new TextEncoder();
+            const data = encoder.encode(toSign);
+            const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function uploadImageToCloudinary(file) {
+            const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+            const timestamp = Math.floor(Date.now() / 1000);
+            const signature = await cloudinarySignature(timestamp);
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('api_key', apiKey);
+            formData.append('timestamp', timestamp);
+            formData.append('signature', signature);
+
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) throw new Error('Error subiendo imagen a Cloudinary');
+            return response.json();
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            msgBox.style.display = 'none';
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true;
+            btn.innerText = currentProductId ? 'Actualizando...' : 'Guardando...';
+
+            try {
+                const images = [];
+                
+                if (imageMethod === 'file') {
+                    for (const input of imageInputs) {
+                        if (input.file.files[0]) {
+                            const upload = await uploadImageToCloudinary(input.file.files[0]);
+                            images.push(upload.secure_url);
+                        }
+                    }
+                } else {
+                    for (const input of imageInputs) {
+                        const url = input.url.value.trim();
+                        if (url) {
+                            images.push(url);
+                        }
+                    }
+                }
+
+                if (!currentProductId && images.length === 0) {
+                    throw new Error('Debe seleccionar al menos una imagen.');
+                }
+
+                const product = {
+                    name: document.getElementById('name').value.trim(),
+                    categoria: document.getElementById('categoria').value.trim(),
+                    desc: document.getElementById('desc').value.trim(),
+                    precio: Number(document.getElementById('precio').value) || 0,
+                    descuento: Number(document.getElementById('descuento').value) || 0,
+                    image: images[0] || '',
+                    image1: images[1] || '',
+                    image2: images[2] || '',
+                    image3: images[3] || '',
+                    image4: images[4] || '',
+                    image5: images[5] || ''
+                };
+
+                if (currentProductId) {
+                    await updateDoc(doc(db, 'productos', currentProductId), product);
+                    showMessage('Producto actualizado correctamente.', 'success');
+                } else {
+                    await addDoc(productsCollection, product);
+                    showMessage('Producto creado correctamente.', 'success');
+                }
+
+                resetForm();
+                refreshProducts();
+            } catch (error) {
+                console.error('Error guardando producto:', error);
+                if (error.message.includes('unavailable') || error.message.includes('network')) {
+                    showMessage('Error de conexión. Verifica tu conexión a internet.', 'error');
+                } else {
+                    showMessage(error.message, 'error');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerText = currentProductId ? 'Guardar producto' : 'Guardar producto';
+            }
+        }
+
+        function showMessage(message, type) {
+            msgBox.innerText = message;
+            msgBox.className = `msg ${type}`;
+            msgBox.style.display = 'block';
+        }
+
+        async function editProduct(id) {
+            try {
+                const productDocRef = doc(db, 'productos', id);
+                const docSnapshot = await getDoc(productDocRef);
+                if (!docSnapshot.exists()) return;
+                const item = docSnapshot.data();
+                currentProductId = id;
+                currentImageUrl = item.image || '';
+                document.getElementById('name').value = item.name || '';
+                document.getElementById('categoria').value = item.categoria || '';
+                document.getElementById('desc').value = item.desc || '';
+                document.getElementById('precio').value = item.precio || 0;
+                document.getElementById('descuento').value = item.descuento || 0;
+                
+                // Cargar URLs de múltiples imágenes
+                const imageUrls = [
+                    item.image,
+                    item.image1,
+                    item.image2,
+                    item.image3,
+                    item.image4,
+                    item.image5
+                ].filter(Boolean);
+                
+                imageUrls.forEach((url, idx) => {
+                    if (imageInputs[idx]) {
+                        imageInputs[idx].url.value = url;
+                    }
+                });
+                
+                setMethod('url');
+                document.getElementById('form-title').innerText = 'Editando producto';
+                document.getElementById('form-desc').innerText = 'Modifica los datos y guarda los cambios.';
+                document.getElementById('btn-save').innerText = 'Actualizar producto';
+                document.getElementById('btn-cancel-edit').style.display = 'block';
+                const img = document.getElementById('ui-img');
+                img.src = item.image || '';
+                img.style.display = item.image ? 'block' : 'none';
+                document.getElementById('ui-placeholder').style.display = item.image ? 'none' : 'block';
+                document.getElementById('ui-name').innerText = item.name || 'Producto';
+                document.getElementById('ui-price').innerText = '$' + (item.precio || 0).toLocaleString();
+                
+                // Actualizar preview de múltiples imágenes
+                updatePreview();
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error cargando producto para editar:', error);
+                showMessage('Error de conexión al cargar producto.', 'error');
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('¿Eliminar este producto?')) return;
+            try {
+                await deleteDoc(doc(db, 'productos', id));
+                refreshProducts();
+            } catch (error) {
+                console.error('Error eliminando producto:', error);
+                showMessage('Error de conexión al eliminar producto.', 'error');
+            }
+        }
+
+        window.editProduct = editProduct;
+        window.deleteProduct = deleteProduct;
+
+        document.getElementById('btn-cancel-edit').onclick = resetForm;
+        form.onsubmit = handleSubmit;
+
+        // Inicializar cuando el DOM esté listo
+        function initAdminApp() {
+            // Verificar que todos los elementos necesarios existan
+            const requiredElements = [
+                'product-list', 'msg-box', 'admin-form',
+                'image1-file', 'image1-url', 'image2-file', 'image2-url',
+                'image3-file', 'image3-url', 'image4-file', 'image4-url',
+                'image5-file', 'image5-url', 'ui-img', 'ui-placeholder'
+            ];
+
+            const missingElements = requiredElements.filter(id => !document.getElementById(id));
+            if (missingElements.length > 0) {
+                console.error('Elementos faltantes:', missingElements);
+                return;
+            }
+
+            refreshProducts();
+            setMethod('file');
+        }
+
+        // Usar DOMContentLoaded para asegurar que el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAdminApp);
+        } else {
+            initAdminApp();
+        }
+
+        // Verificar estado de conexión
+        function updateConnectionStatus() {
+            const status = document.getElementById('connection-status');
+            if (navigator.onLine) {
+                status.textContent = 'EN LÍNEA';
+                status.style.color = 'var(--success)';
+            } else {
+                status.textContent = 'SIN CONEXIÓN';
+                status.style.color = 'var(--error)';
+            }
+        }
+
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        updateConnectionStatus();
+    </script>
+</body>
+</html>
