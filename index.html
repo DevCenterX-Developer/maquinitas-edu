@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
 
@@ -37,7 +38,6 @@
             <div class="nav-actions">
                 <a href="https://wa.me/50234567890" target="_blank" class="nav-cta" title="Contáctanos por WhatsApp">
                     <i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i>
-                    <span>WhatsApp</span>
                 </a>
                 <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" aria-label="Cambiar tema">
                     <i class="fa-solid fa-moon fa-fw" aria-hidden="true"></i>
@@ -125,11 +125,8 @@
                     <p>Contacta con nosotros y descubre cómo podemos ayudarte</p>
                     <div class="cta-buttons">
                         <a href="#contact" class="btn-primary">
-                            <span>Contactar Ahora</span>
+                            <span>Contacto</span>
                         </a>
-                        <button class="btn-secondary" onclick="openCatalog()">
-                            <span>Ver Más Productos</span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -201,6 +198,9 @@
                 <div class="footer-social-links">
                     <h4>Síguenos</h4>
                     <div class="social-icons">
+                        <a href="https://www.facebook.com/share/1DvzbTj6o5/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="social-icon">
+                            <i class="fa-brands fa-facebook-f fa-fw" aria-hidden="true"></i>
+                        </a>
                         <a href="https://www.tiktok.com/@maquinas_edu_gt?_r=1&_t=ZS-95dwnNxpT0c" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="social-icon">
                             <i class="fa-brands fa-tiktok fa-fw" aria-hidden="true"></i>
                         </a>
@@ -420,6 +420,26 @@
             updateThemeBtn(isDark);
         }
 
+        // Función para determinar si es de noche (entre 6 PM y 6 AM)
+        function isNightTime() {
+            const hour = new Date().getHours();
+            return hour >= 18 || hour < 6;
+        }
+
+        // Aplicar tema automático según la hora
+        function applyAutoTheme() {
+            const shouldBeDark = isNightTime();
+            const isCurrentlyDark = document.documentElement.classList.contains('dark-mode');
+            
+            if (shouldBeDark !== isCurrentlyDark) {
+                document.documentElement.classList.toggle('dark-mode');
+                updateThemeBtn(shouldBeDark);
+            }
+        }
+
+        // Verificar tema cada minuto para cambios automáticos
+        setInterval(applyAutoTheme, 60000);
+
         function updateThemeBtn(isDark) {
             const btn = document.getElementById('theme-btn');
             if (!btn) return;
@@ -460,13 +480,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderCategoryChips();
             fetchServices();
-            const saved = localStorage.getItem('theme');
-            if (saved === 'dark') {
+            
+            // Aplicar tema automático según hora del día
+            const shouldBeDark = isNightTime();
+            if (shouldBeDark) {
                 document.documentElement.classList.add('dark-mode');
-                updateThemeBtn(true);
-            } else {
-                updateThemeBtn(false);
             }
+            updateThemeBtn(shouldBeDark);
         });
     </script>
 </body>

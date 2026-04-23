@@ -128,7 +128,7 @@ h1, h2, h3, .logo { font-family: 'Playfair Display', serif; }
 .nav-cta {
     background: linear-gradient(135deg, #22d3ee 0%, #818cf8 100%);
     color: white;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
@@ -137,14 +137,21 @@ h1, h2, h3, .logo { font-family: 'Playfair Display', serif; }
     box-shadow: 0 8px 25px rgba(34, 211, 238, 0.3);
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     border: none;
     cursor: pointer;
+    width: 44px;
+    height: 44px;
 }
 
 .nav-cta:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 35px rgba(34, 211, 238, 0.4);
+}
+
+.nav-cta i {
+    font-size: 1.2rem;
 }
 
 .theme-toggle {
@@ -1093,6 +1100,7 @@ html.dark-mode .modal-image-section { background: #1a0f14; }
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .social-icon {
@@ -1100,7 +1108,7 @@ html.dark-mode .modal-image-section { background: #1a0f14; }
     height: 48px;
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
     border: 2px solid rgba(56, 189, 248, 0.3);
-    border-radius: 12px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1146,6 +1154,11 @@ html.dark-mode .modal-image-section { background: #1a0f14; }
 }
 
 /* Iconos específicos */
+.social-icon[aria-label="Facebook"]:hover {
+    border-color: #1877f2;
+    background: linear-gradient(135deg, rgba(24, 119, 242, 0.2), rgba(24, 119, 242, 0.1));
+}
+
 .social-icon[aria-label="TikTok"]:hover {
     border-color: #000000;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
@@ -1692,6 +1705,247 @@ html.dark-mode .modal-image-section { background: #1a0f14; }
     .product-image {
         height: 120px;
     }
+}
+
+/* =========================================
+   MEJORAS RESPONSIVE MÓVIL
+   ========================================= */
+
+/* Botones táctiles */
+@media (max-width: 768px) {
+    .nav-cta, .btn-primary, .btn-secondary, .theme-toggle, .social-icon {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+    }
+    
+    .nav-cta {
+        padding: 0.6rem 1rem;
+    }
+    
+    .theme-toggle {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .theme-toggle i {
+        font-size: 1.2rem;
+    }
+}
+
+/* Menú móvil */
+@media (max-width: 768px) {
+    .nav-actions.mobile-open {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        right: 0;
+        background: var(--bg-primary);
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .nav-actions.mobile-open .nav-cta {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Animaciones de notificaciones */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Optimización de imágenes para móvil */
+@media (max-width: 768px) {
+    .hero-image {
+        max-width: 80%;
+        height: auto;
+    }
+    
+    .product-image img {
+        object-fit: cover;
+    }
+    
+    .footer-logo {
+        max-width: 120px;
+    }
+}
+
+/* Espaciado seguro en móviles */
+@media (max-width: 768px) {
+    body {
+        padding-top: 80px;
+    }
+    
+    .header {
+        height: auto;
+        min-height: 80px;
+    }
+    
+    .nav-container {
+        height: auto;
+        min-height: 80px;
+        padding: 0.8rem 1rem;
+    }
+}
+
+/* Selector de categoría mejorado móvil */
+@media (max-width: 768px) {
+    .search-filter-section {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .category-selector-container {
+        width: 100%;
+    }
+    
+    .category-select {
+        width: 100%;
+        padding: 0.8rem;
+    }
+    
+    .category-filter {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 0.5rem;
+    }
+    
+    .category-filter::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .category-chip {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+}
+
+/* Grid de productos responsive */
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+    }
+    
+    .product-card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .product-card .product-image {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+    }
+    
+    .product-card .product-info {
+        flex: 1;
+        text-align: left;
+    }
+    
+    .product-card .product-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .product-card .product-category-tag {
+        font-size: 0.7rem;
+    }
+    
+    .product-card .product-price {
+        font-size: 0.85rem;
+    }
+}
+
+/* Footer responsive */
+@media (max-width: 768px) {
+    .footer {
+        padding: 2rem 1rem;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .footer-brand {
+        align-items: center;
+    }
+    
+    .footer-contact ul {
+        align-items: center;
+    }
+    
+    .footer-social-links {
+        align-items: center;
+    }
+    
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* CTA Section responsive */
+@media (max-width: 768px) {
+    .cta-section {
+        padding: 3rem 1rem;
+    }
+    
+    .cta-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .cta-content p {
+        font-size: 0.95rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+}
 
     .product-title {
         font-size: 0.85rem;
